@@ -11,6 +11,21 @@ interface GalleryImageItem {
   categoryLabel: string;
 }
 
+/**
+ * Requests a smaller version directly from Cloudinary's CDN for grid
+ * thumbnails, by inserting a transformation segment into the URL. This
+ * keeps thumbnails fast without going through Next's image optimizer
+ * (which is disabled — see next.config.js). The lightbox always uses the
+ * original, untransformed URL so the full uploaded quality is shown.
+ */
+function cloudinaryThumb(url: string, width = 500) {
+  const marker = "/upload/";
+  const i = url.indexOf(marker);
+  if (i === -1) return url;
+  const insertAt = i + marker.length;
+  return `${url.slice(0, insertAt)}w_${width},c_limit,q_auto,f_auto/${url.slice(insertAt)}`;
+}
+
 export default function GalleryGrid({ images }: { images: GalleryImageItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [zoomed, setZoomed] = useState(false);
@@ -51,7 +66,7 @@ export default function GalleryGrid({ images }: { images: GalleryImageItem[] }) 
                 cover copy fills the background so square tiles never letterbox
                 to empty black bars. */}
             <Image
-              src={image.url}
+              src={cloudinaryThumb(image.url, 500)}
               alt=""
               fill
               aria-hidden
@@ -59,7 +74,7 @@ export default function GalleryGrid({ images }: { images: GalleryImageItem[] }) 
               className="scale-110 object-cover opacity-30 blur-xl"
             />
             <Image
-              src={image.url}
+              src={cloudinaryThumb(image.url, 500)}
               alt={image.altText ?? image.categoryLabel}
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
