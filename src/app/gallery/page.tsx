@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import type { GalleryCategory } from "@prisma/client";
 import GalleryGrid from "./GalleryGrid";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Our Work | Nail Photo Gallery",
   description:

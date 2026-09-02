@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import CourseForm from "@/components/admin/CourseForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditCoursePage({
   params,
 }: {

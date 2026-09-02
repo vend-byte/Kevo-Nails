@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import StatusSelect from "./StatusSelect";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminAppointmentsPage() {
   const appointments = await prisma.appointment.findMany({
     include: { customer: true, service: true },

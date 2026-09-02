@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import BookingForm from "./BookingForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Book an Appointment",
   description: "Book a nail appointment online at Kevo Nails Academy — choose your service, date and time.",

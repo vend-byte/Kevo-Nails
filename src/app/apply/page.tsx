@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import ApplicationForm from "./ApplicationForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Apply Online",
   description: "Apply online to Kevo Nails Academy's nail technician training courses.",

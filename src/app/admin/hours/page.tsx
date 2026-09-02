@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import HoursEditor from "./HoursEditor";
 
+export const dynamic = "force-dynamic";
+
 const WEEKDAY_ORDER = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
 
 export default async function AdminHoursPage() {

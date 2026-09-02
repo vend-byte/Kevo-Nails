@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import ApplicationStatusSelect from "./ApplicationStatusSelect";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminApplicationsPage() {
   const applications = await prisma.application.findMany({
     include: { course: true, intake: true },

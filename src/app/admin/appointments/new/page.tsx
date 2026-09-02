@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import AdminBookingForm from "./AdminBookingForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminNewBookingPage() {
   const services = await prisma.service.findMany({
     where: { isActive: true },

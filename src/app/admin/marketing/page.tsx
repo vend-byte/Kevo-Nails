@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import MarketingManager from "@/components/admin/MarketingManager";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminMarketingPage() {
   const [banners, announcements, promotions] = await Promise.all([
     prisma.banner.findMany({ orderBy: { createdAt: "desc" } }),

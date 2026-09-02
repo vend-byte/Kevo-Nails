@@ -3,6 +3,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import type { IntakeStatus } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Upcoming Nail Training Intakes",
   description:

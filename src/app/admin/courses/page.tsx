@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import DeleteButton from "@/components/admin/DeleteButton";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminCoursesPage() {
   const [courses, intakes] = await Promise.all([
     prisma.course.findMany({ orderBy: { sortOrder: "asc" } }),

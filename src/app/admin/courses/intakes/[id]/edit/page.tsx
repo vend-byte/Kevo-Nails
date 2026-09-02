@@ -1,6 +1,8 @@
-﻿import { notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import IntakeForm from "@/components/admin/IntakeForm";
+
+export const dynamic = "force-dynamic";
 
 export default async function EditIntakePage({
   params,

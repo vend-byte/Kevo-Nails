@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import DeleteServiceButton from "./DeleteServiceButton";
 
+export const dynamic = "force-dynamic";
+
 function formatKsh(amount: number) {
   return new Intl.NumberFormat("en-KE", {
     style: "currency",

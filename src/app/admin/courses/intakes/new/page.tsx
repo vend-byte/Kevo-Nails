@@ -1,5 +1,7 @@
-﻿import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import IntakeForm from "@/components/admin/IntakeForm";
+
+export const dynamic = "force-dynamic";
 
 export default async function NewIntakePage() {
   const courses = await prisma.course.findMany({
