@@ -26,6 +26,18 @@ export default async function AdminSettingsPage() {
             tiktokAcademyUrl: settings?.tiktokAcademyUrl ?? "",
             tiktokSalonUrl: settings?.tiktokSalonUrl ?? "",
             facebook: settings?.facebook ?? "",
+            whatsappButtonEnabled: settings?.whatsappButtonEnabled ?? true,
+            whatsappGlowEnabled: settings?.whatsappGlowEnabled ?? true,
+            whatsappDefaultMessage:
+              settings?.whatsappDefaultMessage ??
+              "Hi Kevo Nails Academy! I'd like to know more about your services.",
+            maintenanceMode: settings?.maintenanceMode ?? false,
+            maintenanceMessage:
+              settings?.maintenanceMessage ??
+              "We're currently updating our website. Please check back shortly.",
+            aboutText: settings?.aboutText ?? "",
+            visionText: settings?.visionText ?? "",
+            missionText: settings?.missionText ?? "",
           }}
         />
       </div>

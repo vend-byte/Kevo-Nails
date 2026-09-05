@@ -28,8 +28,15 @@ function maxBookingDateISO() {
   return d.toISOString().slice(0, 10);
 }
 
-export default function BookingForm({ services }: { services: Service[] }) {
-  const [serviceId, setServiceId] = useState(services[0]?.id ?? "");
+export default function BookingForm({
+  services,
+  preselectedServiceId,
+}: {
+  services: Service[];
+  preselectedServiceId?: string;
+}) {
+  const validPreselected = services.find((s) => s.id === preselectedServiceId)?.id;
+  const [serviceId, setServiceId] = useState(validPreselected ?? services[0]?.id ?? "");
   const [date, setDate] = useState(todayISO());
   const [slots, setSlots] = useState<string[]>([]);
   const [slotsReason, setSlotsReason] = useState<string | null>(null);

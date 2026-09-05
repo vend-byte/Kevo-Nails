@@ -5,9 +5,12 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 
 export default function AdminLayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isLogin = pathname === "/admin/login";
+  const isPublicAuthPage =
+    pathname === "/admin/login" ||
+    pathname === "/admin/forgot-password" ||
+    pathname === "/admin/reset-password";
 
-  if (isLogin) {
+  if (isPublicAuthPage) {
     return <>{children}</>;
   }
 

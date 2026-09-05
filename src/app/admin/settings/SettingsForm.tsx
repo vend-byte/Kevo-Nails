@@ -14,6 +14,14 @@ interface SettingsValues {
   tiktokAcademyUrl: string;
   tiktokSalonUrl: string;
   facebook: string;
+  whatsappButtonEnabled: boolean;
+  whatsappGlowEnabled: boolean;
+  whatsappDefaultMessage: string;
+  maintenanceMode: boolean;
+  maintenanceMessage: string;
+  aboutText: string;
+  visionText: string;
+  missionText: string;
 }
 
 export default function SettingsForm({ initial }: { initial: SettingsValues }) {
@@ -166,6 +174,102 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
           <input
             value={values.facebook}
             onChange={(e) => update({ facebook: e.target.value })}
+            className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white outline-none focus:border-brand-blue-light"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-white/10 pt-6">
+        <p className="text-xs font-semibold uppercase tracking-wide text-white/40">
+          WhatsApp Button
+        </p>
+        <label className="flex items-center gap-2 text-sm text-white/80">
+          <input
+            type="checkbox"
+            checked={values.whatsappButtonEnabled}
+            onChange={(e) => update({ whatsappButtonEnabled: e.target.checked })}
+          />
+          Show floating WhatsApp button on the website
+        </label>
+        <label className="flex items-center gap-2 text-sm text-white/80">
+          <input
+            type="checkbox"
+            checked={values.whatsappGlowEnabled}
+            onChange={(e) => update({ whatsappGlowEnabled: e.target.checked })}
+          />
+          Glow / pulse animation
+        </label>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-white/80">
+            Default WhatsApp Message
+          </label>
+          <textarea
+            value={values.whatsappDefaultMessage}
+            onChange={(e) => update({ whatsappDefaultMessage: e.target.value })}
+            rows={2}
+            className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white outline-none focus:border-brand-blue-light"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-white/10 pt-6">
+        <p className="text-xs font-semibold uppercase tracking-wide text-white/40">
+          Maintenance Mode
+        </p>
+        <label className="flex items-center gap-2 text-sm text-white/80">
+          <input
+            type="checkbox"
+            checked={values.maintenanceMode}
+            onChange={(e) => update({ maintenanceMode: e.target.checked })}
+          />
+          <span>
+            Enable maintenance mode{" "}
+            <span className="text-white/40">
+              (visitors see a maintenance page — admin login still works)
+            </span>
+          </span>
+        </label>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-white/80">
+            Maintenance Message
+          </label>
+          <textarea
+            value={values.maintenanceMessage}
+            onChange={(e) => update({ maintenanceMessage: e.target.value })}
+            rows={2}
+            className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white outline-none focus:border-brand-blue-light"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-white/10 pt-6">
+        <p className="text-xs font-semibold uppercase tracking-wide text-white/40">
+          About / Vision / Mission
+        </p>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-white/80">About Us</label>
+          <textarea
+            value={values.aboutText}
+            onChange={(e) => update({ aboutText: e.target.value })}
+            rows={4}
+            className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white outline-none focus:border-brand-blue-light"
+          />
+        </div>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-white/80">Our Vision</label>
+          <textarea
+            value={values.visionText}
+            onChange={(e) => update({ visionText: e.target.value })}
+            rows={3}
+            className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white outline-none focus:border-brand-blue-light"
+          />
+        </div>
+        <div>
+          <label className="mb-2 block text-sm font-medium text-white/80">Our Mission</label>
+          <textarea
+            value={values.missionText}
+            onChange={(e) => update({ missionText: e.target.value })}
+            rows={3}
             className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white outline-none focus:border-brand-blue-light"
           />
         </div>

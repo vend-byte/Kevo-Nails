@@ -14,6 +14,14 @@ const settingsSchema = z.object({
   tiktokAcademyUrl: z.string().trim().url().optional().or(z.literal("")),
   tiktokSalonUrl: z.string().trim().url().optional().or(z.literal("")),
   facebook: z.string().trim().url().optional().or(z.literal("")),
+  whatsappButtonEnabled: z.boolean().default(true),
+  whatsappGlowEnabled: z.boolean().default(true),
+  whatsappDefaultMessage: z.string().trim().min(1),
+  maintenanceMode: z.boolean().default(false),
+  maintenanceMessage: z.string().trim().min(1),
+  aboutText: z.string().trim().optional(),
+  visionText: z.string().trim().optional(),
+  missionText: z.string().trim().optional(),
 });
 
 export async function GET() {
@@ -40,6 +48,9 @@ export async function PUT(request: NextRequest) {
     tiktokAcademyUrl: payload.tiktokAcademyUrl || null,
     tiktokSalonUrl: payload.tiktokSalonUrl || null,
     facebook: payload.facebook || null,
+    aboutText: payload.aboutText || null,
+    visionText: payload.visionText || null,
+    missionText: payload.missionText || null,
   };
 
   const settings = existing

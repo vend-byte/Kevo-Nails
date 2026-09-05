@@ -9,7 +9,13 @@ export const metadata: Metadata = {
   description: "Book a nail appointment online at Kevo Nails Academy — choose your service, date and time.",
 };
 
-export default async function BookPage() {
+export default async function BookPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ service?: string }>;
+}) {
+  const { service: preselectedService } = await searchParams;
+
   const services = await prisma.service.findMany({
     where: { isActive: true },
     orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
@@ -35,7 +41,7 @@ export default async function BookPage() {
               No services are available for booking yet. Please contact us on WhatsApp.
             </p>
           ) : (
-            <BookingForm services={services} />
+            <BookingForm services={services} preselectedServiceId={preselectedService} />
           )}
         </div>
       </div>

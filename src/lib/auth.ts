@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { randomBytes, createHash } from "crypto";
 
 const SESSION_COOKIE = "kna_admin_session";
 const secret = () => new TextEncoder().encode(process.env.AUTH_SECRET);
@@ -11,6 +12,22 @@ export async function hashPassword(password: string) {
 
 export async function verifyPassword(password: string, hash: string) {
   return bcrypt.compare(password, hash);
+}
+
+/**
+ * Generates a high-entropy, single-use password reset token.
+ * Returns both the raw token (put in the email link — never stored) and its
+ * SHA-256 hash (stored in the database). Even if the database were somehow
+ * exposed, the raw token could not be recovered from the stored hash.
+ */
+export function generateResetToken() {
+  const rawToken = randomBytes(32).toString("hex");
+  const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+  return { rawToken, tokenHash };
+}
+
+export function hashResetToken(rawToken: string) {
+  return createHash("sha256").update(rawToken).digest("hex");
 }
 
 export async function createSession(userId: string) {

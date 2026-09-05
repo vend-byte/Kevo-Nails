@@ -233,3 +233,20 @@ export function bookingStatusUpdateEmailHtml(booking: {
     <p>For questions, reach us on WhatsApp at 0702078249.</p>
   `;
 }
+
+export function adminPasswordResetEmailHtml({
+  name,
+  resetUrl,
+}: {
+  name: string;
+  resetUrl: string;
+}) {
+  return `
+    <h2>Password Reset — Kevo Nails Academy Admin</h2>
+    <p>Hi ${name},</p>
+    <p>We received a request to reset the password for your Kevo Nails Academy admin account.</p>
+    <p><a href="${resetUrl}">Click here to reset your password</a></p>
+    <p>This link will expire in 1 hour and can only be used once.</p>
+    <p>If you did not request this, you can safely ignore this email — your password will not be changed.</p>
+  `;
+}

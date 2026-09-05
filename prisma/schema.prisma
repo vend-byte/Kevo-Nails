@@ -25,6 +25,8 @@ model AdminUser {
   email        String    @unique
   passwordHash String
   role         AdminRole @default(STAFF)
+  resetTokenHash   String?
+  resetTokenExpiry DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
@@ -170,6 +172,14 @@ model WebsiteSetting {
   seoDefaultTitle       String?
   seoDefaultDescription String?
   chatbotEnabled        Boolean @default(true)
+  whatsappButtonEnabled Boolean @default(true)
+  whatsappGlowEnabled   Boolean @default(true)
+  whatsappDefaultMessage String @default("Hi Kevo Nails Academy! I'd like to know more about your services.")
+  maintenanceMode       Boolean @default(false)
+  maintenanceMessage    String @default("We're currently updating our website. Please check back shortly.")
+  aboutText             String?
+  visionText            String?
+  missionText           String?
   updatedAt         DateTime @updatedAt
 }
 
@@ -396,6 +406,7 @@ enum EmailType {
   APPLICATION_APPLICANT_CONFIRMATION
   BOOKING_ADMIN_NOTICE
   BOOKING_CUSTOMER_CONFIRMATION
+  ADMIN_PASSWORD_RESET
 }
 
 model EmailLog {

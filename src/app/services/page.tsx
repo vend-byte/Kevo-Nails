@@ -59,7 +59,7 @@ export default async function ServicesPage() {
                   {items.map((service) => (
                     <div
                       key={service.id}
-                      className="flex items-start justify-between rounded-xl border border-white/10 bg-white/5 p-5"
+                      className="flex items-start justify-between gap-4 rounded-xl border border-white/10 bg-white/5 p-5"
                     >
                       <div>
                         <p className="font-medium">{service.name}</p>
@@ -69,6 +69,12 @@ export default async function ServicesPage() {
                         <p className="mt-2 text-xs uppercase tracking-wide text-white/40">
                           {service.durationMins} mins
                         </p>
+                        <a
+                          href={`/book?service=${service.id}`}
+                          className="mt-3 inline-block rounded-full bg-brand-blue-light px-4 py-1.5 text-xs font-medium text-white shadow-[0_0_0_0_rgba(37,99,235,0)] transition hover:opacity-90 hover:shadow-[0_0_16px_2px_rgba(37,99,235,0.5)] focus:outline-none focus:ring-2 focus:ring-brand-blue-light"
+                        >
+                          Book Now
+                        </a>
                       </div>
                       <p className="whitespace-nowrap text-lg font-semibold text-brand-blue-light">
                         {formatKsh(service.priceKsh)}
