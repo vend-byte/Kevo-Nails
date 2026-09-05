@@ -2,6 +2,12 @@ import nodemailer from "nodemailer";
 import { prisma } from "./prisma";
 import type { EmailType } from "@prisma/client";
 
+// Falls back to the real production domain (never localhost) if the
+// environment variable is somehow blank on the deployed server — this
+// is what admin dashboard links in emails use, so a missing/blank env
+// var can never accidentally send a client to "localhost".
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://kevoonails.co.ke";
+
 /**
  * Email service abstraction.
  * Swap the transporter implementation here to change providers
@@ -82,7 +88,7 @@ export function applicationAdminEmailHtml(app: {
     <p><strong>Intake:</strong> ${app.intakeName}</p>
     <p><strong>Application Reference:</strong> ${app.applicationRef}</p>
     <p><strong>Date:</strong> ${app.createdAt.toLocaleString()}</p>
-    <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/admin/applications">View in Admin Dashboard</a></p>
+    <p><a href="${SITE_URL}/admin/applications">View in Admin Dashboard</a></p>
   `;
 }
 
@@ -126,7 +132,7 @@ export function bookingAdminEmailHtml(booking: {
     <p><strong>Time:</strong> ${booking.time}</p>
     <p><strong>Booking Reference:</strong> ${booking.bookingRef}</p>
     ${booking.notes ? `<p><strong>Notes:</strong> ${booking.notes}</p>` : ""}
-    <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/admin/appointments">View in Admin Dashboard</a></p>
+    <p><a href="${SITE_URL}/admin/appointments">View in Admin Dashboard</a></p>
   `;
 }
 
