@@ -78,31 +78,6 @@ export default async function ContactPage() {
           </p>
         </div>
 
-        {(settings?.aboutText || settings?.visionText || settings?.missionText) && (
-          <section className="mt-16 space-y-8">
-            {settings?.aboutText && (
-              <div>
-                <h2 className="text-xl font-semibold text-brand-blue-light">About Us</h2>
-                <p className="mt-3 whitespace-pre-line text-white/70">{settings.aboutText}</p>
-              </div>
-            )}
-            <div className="grid gap-6 sm:grid-cols-2">
-              {settings?.visionText && (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-                  <h3 className="font-semibold text-brand-blue-light">Our Vision</h3>
-                  <p className="mt-2 text-sm text-white/70">{settings.visionText}</p>
-                </div>
-              )}
-              {settings?.missionText && (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-                  <h3 className="font-semibold text-brand-blue-light">Our Mission</h3>
-                  <p className="mt-2 text-sm text-white/70">{settings.missionText}</p>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-
         <div className="mt-16 grid gap-6 sm:grid-cols-2">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
             <h2 className="text-lg font-semibold text-brand-blue-light">Get in Touch</h2>

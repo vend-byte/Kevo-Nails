@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import SettingsForm from "./SettingsForm";
+import PasswordSection from "./PasswordSection";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +41,7 @@ export default async function AdminSettingsPage() {
             missionText: settings?.missionText ?? "",
           }}
         />
+        <PasswordSection />
       </div>
     </div>
   );

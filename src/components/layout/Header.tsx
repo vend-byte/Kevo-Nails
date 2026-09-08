@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: "/gallery", label: "Our Work" },
   { href: "/academy", label: "Academy" },
   { href: "/intakes", label: "Intakes" },
+  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
