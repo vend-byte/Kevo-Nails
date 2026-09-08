@@ -16,15 +16,22 @@ export default async function BookPage({
 }) {
   const { service: preselectedService } = await searchParams;
 
-  const services = await prisma.service.findMany({
-    where: { isActive: true },
-    orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
-    select: { id: true, name: true, category: true, priceKsh: true, durationMins: true },
-  });
+  const [services, staff] = await Promise.all([
+    prisma.service.findMany({
+      where: { isActive: true },
+      orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
+      select: { id: true, name: true, category: true, priceKsh: true, durationMins: true },
+    }),
+    prisma.staff.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+      select: { id: true, fullName: true, whatsapp: true, role: true, bio: true, photoUrl: true },
+    }),
+  ]);
 
   return (
     <main className="min-h-screen bg-brand-black text-white">
-      <div className="mx-auto max-w-2xl px-6 py-20">
+      <div className="mx-auto max-w-3xl px-6 py-20">
         <div className="text-center">
           <span className="text-sm uppercase tracking-[0.3em] text-brand-blue-light">
             Kevo Nails Academy
@@ -41,7 +48,7 @@ export default async function BookPage({
               No services are available for booking yet. Please contact us on WhatsApp.
             </p>
           ) : (
-            <BookingForm services={services} preselectedServiceId={preselectedService} />
+            <BookingForm services={services} staff={staff} preselectedServiceId={preselectedService} />
           )}
         </div>
       </div>

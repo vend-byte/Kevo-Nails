@@ -25,7 +25,7 @@ export function validateImageFile(file: { type: string; size: number }) {
  */
 export async function uploadImage(
   fileDataUri: string,
-  folder: "gallery" | "services" | "courses" | "intakes" | "banners" | "applications" | "settings"
+  folder: "gallery" | "services" | "courses" | "intakes" | "banners" | "applications" | "settings" | "staff"
 ) {
   const result = await cloudinary.uploader.upload(fileDataUri, {
     folder: `kevo-nails-academy/${folder}`,

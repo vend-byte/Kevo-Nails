@@ -4,11 +4,18 @@ import AdminBookingForm from "./AdminBookingForm";
 export const dynamic = "force-dynamic";
 
 export default async function AdminNewBookingPage() {
-  const services = await prisma.service.findMany({
-    where: { isActive: true },
-    orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
-    select: { id: true, name: true, category: true, priceKsh: true, durationMins: true },
-  });
+  const [services, staff] = await Promise.all([
+    prisma.service.findMany({
+      where: { isActive: true },
+      orderBy: [{ category: "asc" }, { sortOrder: "asc" }],
+      select: { id: true, name: true, category: true, priceKsh: true, durationMins: true },
+    }),
+    prisma.staff.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+      select: { id: true, fullName: true },
+    }),
+  ]);
 
   return (
     <div className="p-8">
@@ -19,7 +26,7 @@ export default async function AdminNewBookingPage() {
       </p>
 
       <div className="mt-8 max-w-xl">
-        <AdminBookingForm services={services} />
+        <AdminBookingForm services={services} staff={staff} />
       </div>
     </div>
   );

@@ -11,13 +11,19 @@ interface Service {
   durationMins: number;
 }
 
+interface StaffOption {
+  id: string;
+  fullName: string;
+}
+
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
-export default function AdminBookingForm({ services }: { services: Service[] }) {
+export default function AdminBookingForm({ services, staff }: { services: Service[]; staff: StaffOption[] }) {
   const router = useRouter();
   const [serviceId, setServiceId] = useState(services[0]?.id ?? "");
+  const [staffId, setStaffId] = useState("");
   const [date, setDate] = useState(todayISO());
   const [slots, setSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
@@ -55,7 +61,7 @@ export default function AdminBookingForm({ services }: { services: Service[] }) 
       const res = await fetch("/api/booking/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ serviceId, date, time, fullName, phone, email, notes }),
+        body: JSON.stringify({ serviceId, staffId: staffId || undefined, date, time, fullName, phone, email, notes }),
       });
       const data = await res.json();
 
@@ -130,6 +136,24 @@ export default function AdminBookingForm({ services }: { services: Service[] }) 
             ))}
           </select>
         </div>
+      </div>
+
+      <div>
+        <label className="mb-2 block text-sm font-medium text-white/80">
+          Staff Member <span className="text-white/40">(optional)</span>
+        </label>
+        <select
+          value={staffId}
+          onChange={(e) => setStaffId(e.target.value)}
+          className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-2.5 text-white outline-none focus:border-brand-blue-light"
+        >
+          <option value="" className="bg-brand-black">No preference</option>
+          {staff.map((s) => (
+            <option key={s.id} value={s.id} className="bg-brand-black">
+              {s.fullName}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>

@@ -31,6 +31,19 @@ model AdminUser {
   updatedAt    DateTime  @updatedAt
 
   appointmentNotes AppointmentNote[]
+  pushSubscriptions PushSubscription[]
+}
+
+model PushSubscription {
+  id          String    @id @default(cuid())
+  adminUserId String
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  endpoint    String    @unique
+  p256dh      String
+  auth        String
+  createdAt   DateTime  @default(now())
+
+  @@index([adminUserId])
 }
 
 // ---------------------------------------------------------------------------
@@ -77,6 +90,46 @@ enum AppointmentStatus {
   NO_SHOW
 }
 
+enum BookingMethod {
+  WEBSITE
+  WHATSAPP
+}
+
+model Staff {
+  id           String   @id @default(cuid())
+  fullName     String
+  whatsapp     String   @unique // international format, e.g. 254758511514
+  role         String?
+  bio          String?
+  photoPublicId String?
+  photoUrl     String?
+  isActive     Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  appointments Appointment[]
+}
+
+// Logs a customer's intent to book via WhatsApp. This is informational only —
+// it does NOT hold a time slot (unlike Appointment, which has a unique
+// constraint on serviceId+startTime) because the staff member has not yet
+// confirmed availability. Prevents "Pending WhatsApp Confirmation" requests
+// from blocking real website bookings for the same slot.
+model WhatsappBookingLog {
+  id              String   @id @default(cuid())
+  staffId         String?
+  staffName       String
+  serviceName     String
+  priceKsh        Int
+  durationMins    Int
+  date            String
+  time            String
+  customerName    String
+  customerPhone   String
+  createdAt       DateTime @default(now())
+}
+
 model Appointment {
   id             String            @id @default(cuid())
   bookingRef     String            @unique // e.g. KNA-APT-2026-000123
@@ -84,6 +137,10 @@ model Appointment {
   customer       Customer          @relation(fields: [customerId], references: [id])
   serviceId      String
   service        Service           @relation(fields: [serviceId], references: [id])
+  staffId        String?
+  staff          Staff?            @relation(fields: [staffId], references: [id], onDelete: SetNull)
+  staffNameSnapshot String? // preserved even if the Staff record is later deleted
+  bookingMethod  BookingMethod     @default(WEBSITE)
   date           DateTime          @db.Date
   startTime      DateTime // stored as full UTC datetime for the slot start
   endTime        DateTime
@@ -102,6 +159,7 @@ model Appointment {
   @@unique([serviceId, startTime])
   @@index([date])
   @@index([status])
+  @@index([staffId])
 }
 
 model AppointmentNote {

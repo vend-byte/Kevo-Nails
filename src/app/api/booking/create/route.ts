@@ -3,12 +3,14 @@ import { z } from "zod";
 import { createBooking } from "@/lib/booking";
 import { prisma } from "@/lib/prisma";
 import { sendEmail, bookingAdminEmailHtml, bookingCustomerEmailHtml } from "@/lib/email";
+import { sendPushToAllAdmins } from "@/lib/push";
 import { getSessionUserId } from "@/lib/auth";
 
 const MAX_BOOKING_DAYS_AHEAD = 14;
 
 const bookingSchema = z.object({
   serviceId: z.string().min(1),
+  staffId: z.string().min(1).optional(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format."),
   time: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format."),
   fullName: z.string().trim().min(2, "Please enter your full name.").max(120),
@@ -52,10 +54,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Selected service was not found." }, { status: 404 });
   }
 
+  // Never trust staff selection from the browser — re-verify it exists and
+  // is still active server-side (a staff member could have been deactivated
+  // between page load and submit).
+  let staff = null;
+  if (payload.staffId) {
+    staff = await prisma.staff.findUnique({ where: { id: payload.staffId } });
+    if (!staff || !staff.isActive) {
+      return NextResponse.json(
+        { error: "The selected staff member is no longer available. Please choose another." },
+        { status: 400 }
+      );
+    }
+  }
+
   let appointment;
   try {
     appointment = await createBooking({
       serviceId: payload.serviceId,
+      staffId: staff?.id,
+      staffNameSnapshot: staff?.fullName,
       date: payload.date,
       time: payload.time,
       customer: {
@@ -98,6 +116,12 @@ export async function POST(request: NextRequest) {
     });
   }
 
+  await sendPushToAllAdmins({
+    title: "New Booking",
+    body: `${payload.fullName} — ${service.name} on ${payload.date} at ${payload.time}`,
+    url: "/admin/appointments",
+  });
+
   if (payload.email) {
     await sendEmail({
       type: "BOOKING_CUSTOMER_CONFIRMATION",
@@ -116,6 +140,7 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({
     bookingRef: appointment.bookingRef,
     serviceName: service.name,
+    staffName: staff?.fullName ?? null,
     date: payload.date,
     time: payload.time,
   });

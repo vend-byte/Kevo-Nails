@@ -94,6 +94,8 @@ export async function getAvailableSlots({ serviceId, date }: SlotInput) {
 
 interface CreateBookingInput {
   serviceId: string;
+  staffId?: string;
+  staffNameSnapshot?: string;
   date: string; // "2026-10-12"
   time: string; // "14:00"
   customer: { fullName: string; phone: string; email?: string };
@@ -141,6 +143,8 @@ export async function createBooking(input: CreateBookingInput) {
           bookingRef: generateBookingRef(),
           customerId: customer.id,
           serviceId: input.serviceId,
+          staffId: input.staffId,
+          staffNameSnapshot: input.staffNameSnapshot,
           date,
           startTime,
           endTime,

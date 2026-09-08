@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   CalendarDays,
   Users,
+  UserCog,
   Scissors,
   FileText,
   GraduationCap,
@@ -25,6 +26,7 @@ const NAV_SECTIONS: { title?: string; items: { href: string; label: string; icon
     title: "Bookings",
     items: [
       { href: "/admin/appointments", label: "Appointments", icon: CalendarDays },
+      { href: "/admin/staff", label: "Staff Management", icon: UserCog },
       { href: "/admin/customers", label: "Customers", icon: Users },
       { href: "/admin/services", label: "Services", icon: Scissors },
     ],
