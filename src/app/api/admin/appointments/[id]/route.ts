@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { sendEmail, bookingStatusUpdateEmailHtml } from "@/lib/email";
+import { getSessionUserId } from "@/lib/auth";
 
 const updateSchema = z.object({
   status: z.enum(["PENDING", "CONFIRMED", "RESCHEDULED", "COMPLETED", "CANCELLED", "NO_SHOW"]),
@@ -11,6 +12,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+
   const { id } = await params;
 
   let payload;
@@ -57,4 +61,22 @@ export async function PATCH(
   }
 
   return NextResponse.json(appointment);
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+
+  const { id } = await params;
+
+  try {
+    await prisma.appointment.delete({ where: { id } });
+  } catch {
+    return NextResponse.json({ error: "Appointment not found." }, { status: 404 });
+  }
+
+  return NextResponse.json({ ok: true });
 }

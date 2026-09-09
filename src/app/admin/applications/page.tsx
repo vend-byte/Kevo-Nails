@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import ApplicationStatusSelect from "./ApplicationStatusSelect";
+import DeleteButton from "@/components/admin/DeleteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,7 @@ export default async function AdminApplicationsPage() {
                 <th className="px-4 py-3">Submitted</th>
                 <th className="px-4 py-3">Emails</th>
                 <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody>
@@ -62,6 +64,12 @@ export default async function AdminApplicationsPage() {
                   </td>
                   <td className="px-4 py-3">
                     <ApplicationStatusSelect applicationId={app.id} currentStatus={app.status} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <DeleteButton
+                      endpoint={`/api/admin/applications/${app.id}`}
+                      confirmMessage={`Delete the application from ${app.fullName}? This cannot be undone.`}
+                    />
                   </td>
                 </tr>
               ))}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import StatusSelect from "./StatusSelect";
+import DeleteButton from "@/components/admin/DeleteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +67,7 @@ export default async function AdminAppointmentsPage({
                 <th className="px-4 py-3">Time</th>
                 <th className="px-4 py-3">Method</th>
                 <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody>
@@ -83,6 +85,12 @@ export default async function AdminAppointmentsPage({
                   <td className="px-4 py-3 text-xs text-white/60">{apt.bookingMethod}</td>
                   <td className="px-4 py-3">
                     <StatusSelect appointmentId={apt.id} currentStatus={apt.status} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <DeleteButton
+                      endpoint={`/api/admin/appointments/${apt.id}`}
+                      confirmMessage={`Delete the appointment for ${apt.customer.fullName}? This cannot be undone.`}
+                    />
                   </td>
                 </tr>
               ))}

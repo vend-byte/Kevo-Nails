@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { sendEmail, applicationStatusUpdateEmailHtml } from "@/lib/email";
+import { getSessionUserId } from "@/lib/auth";
 
 const updateSchema = z.object({
   status: z.enum(["RECEIVED", "UNDER_REVIEW", "ACCEPTED", "WAITLISTED", "REJECTED"]),
@@ -11,6 +12,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+
   const { id } = await params;
 
   let payload;
@@ -31,9 +35,6 @@ export async function PATCH(
     return NextResponse.json({ error: "Application not found." }, { status: 404 });
   }
 
-  // Notify the applicant of the status change, if we have their email and
-  // there's copy defined for this status (RECEIVED has no separate email —
-  // that's already sent at submission time).
   if (application.email) {
     const html = applicationStatusUpdateEmailHtml({
       fullName: application.fullName,
@@ -61,4 +62,22 @@ export async function PATCH(
   }
 
   return NextResponse.json(application);
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const userId = await getSessionUserId();
+  if (!userId) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+
+  const { id } = await params;
+
+  try {
+    await prisma.application.delete({ where: { id } });
+  } catch {
+    return NextResponse.json({ error: "Application not found." }, { status: 404 });
+  }
+
+  return NextResponse.json({ ok: true });
 }
