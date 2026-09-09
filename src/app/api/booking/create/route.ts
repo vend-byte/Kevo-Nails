@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createBooking } from "@/lib/booking";
 import { prisma } from "@/lib/prisma";
 import { sendEmail, bookingAdminEmailHtml, bookingCustomerEmailHtml } from "@/lib/email";
-import { sendPushToAllAdmins } from "@/lib/push";
 import { getSessionUserId } from "@/lib/auth";
 
 const MAX_BOOKING_DAYS_AHEAD = 14;
@@ -115,12 +114,6 @@ export async function POST(request: NextRequest) {
       }),
     });
   }
-
-  await sendPushToAllAdmins({
-    title: "New Booking",
-    body: `${payload.fullName} — ${service.name} on ${payload.date} at ${payload.time}`,
-    url: "/admin/appointments",
-  });
 
   if (payload.email) {
     await sendEmail({

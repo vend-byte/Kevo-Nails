@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { sendPushToAllAdmins } from "@/lib/push";
 
 const schema = z.object({
   serviceId: z.string().min(1),
@@ -43,12 +42,6 @@ export async function POST(request: NextRequest) {
       customerName: payload.customerName,
       customerPhone: payload.customerPhone,
     },
-  });
-
-  await sendPushToAllAdmins({
-    title: "WhatsApp Booking Request",
-    body: `${payload.customerName} messaged ${staff.fullName} about ${service.name} on ${payload.date}`,
-    url: "/admin/appointments",
   });
 
   return NextResponse.json({ ok: true, id: log.id });
